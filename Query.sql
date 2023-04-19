@@ -6,13 +6,18 @@ FROM employees
 JOIN positions ON employees.position_id = positions.position_id;
 
 /*2-Escribe un query para obtener los nombres y títulos (posiciones) de todos los empleados que son managers (es decir, que tienen al menos un reporte directo a su cargo).*/
-SELECT first_name, last_name, title
-FROM employees 
-JOIN positions ON employees.position_id = positions.position_id
-WHERE employee_id IN (
-  SELECT DISTINCT manager_id
-  FROM employees
-);
+/*Departamentos Managers:  8,6,4,2 */
+
+SELECT e.first_name, e.last_name, p.title
+FROM employees e
+JOIN positions p ON e.position_id = p.position_id
+WHERE e.position_id IN (8,6,4,2);
+
+/*SELECT e.first_name, e.last_name, e.department, p.title
+FROM employees e
+JOIN positions p ON e.position_id = p.position_id
+WHERE CONCAT(e.department,' ','Manager') = p.title;*/
+
 
 /*3-Escribe un query para actualizar el salario de todos los empleados en el departamento 'Sales' a $50,000.*/
 SELECT position_id
@@ -30,13 +35,12 @@ FROM positions
 DELETE FROM employees WHERE department = 'HR';
 
 /*5-Escribe un query para obtener los nombres y departamentos de todos los empleados que no son managers (es decir, que no tienen reportes directos a su cargo).*/
-SELECT first_name, last_name, title
-FROM employees 
-JOIN positions ON employees.position_id = positions.position_id
-WHERE employee_id NOT IN (
-  SELECT DISTINCT manager_id
-  FROM employees
-);
+/*No manager:  1,2,3,5,7,9*/
+SELECT e.first_name, e.last_name, p.title
+FROM employees e
+JOIN positions p ON e.position_id = p.position_id
+WHERE e.position_id IN ( 1,2,3,5,7,9);
+
 
 /*6-Escribe un query para obtener los nombres y títulos (posiciones) de todos los empleados que le reportan directamente al CEO.*/
 SELECT e.first_name, e.last_name, p.title
@@ -71,9 +75,16 @@ WHERE department IN (
 
 /*9-Escribe un query para borrar a todos los empleados que no son managers y tienen un salario menor a $50,000.*/
 DELETE FROM employees
-WHERE employee_id NOT IN (SELECT DISTINCT manager_id FROM employees) AND salary < 50000;
+WHERE department IN (
+    SELECT department 
+    FROM employees
+    JOIN positions ON employees.position_id = positions.position_id
+    WHERE salary < 50000 AND employees.position_id IN ( 1,2,3,5,7,9)
+);
+
 
 /*10-Escribe un query para obtener los nombres y departamentos de todos los empleados que tienen al menos un reporte directo en el departamento ‘Engineering’.*/
-SELECT e.first_name, e.last_name, e.department
-FROM employees e
-WHERE e.manager_id IN (SELECT employee_id FROM employees WHERE department = 'Engineering');
+SELECT first_name, last_name, department
+FROM employees 
+WHERE manager_id != 0 AND department='Engineering';
+

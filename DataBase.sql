@@ -15,7 +15,8 @@ CREATE TABLE employees (
  manager_id INTEGER,
  position_id INTEGER,
  FOREIGN KEY (position_id) REFERENCES positions(position_id)
-);
+);
+
 INSERT INTO positions (position_id, title, salary)
 VALUES
  (1, 'Marketing Assistant', 45000.00),
@@ -28,7 +29,8 @@ VALUES
  (8, 'Engineering Manager', 80000.00),
  (9, 'CEO', 100000.00);
 
- INSERT INTO employees (employee_id, first_name, last_name, department, 
+ 
+INSERT INTO employees (employee_id, first_name, last_name, department, 
 manager_id, position_id)
 VALUES
  (1, 'John', 'Doe', 'Marketing', 3, 1),
